@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Hotel Review Sentiment</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3159/3159066.png" type="image/png"> <!-- New review icon -->
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3159/3159066.png" type="image/png">
 
   <style>
     * {
@@ -43,7 +43,7 @@
     }
 
     .logo {
-      width: 80px;
+      width: 70px;
       margin-bottom: 20px;
     }
 
@@ -101,10 +101,18 @@
     }
 
     .result {
-      margin-top: 30px;
       font-size: 1.3em;
       font-weight: bold;
       color: #27ae60;
+    }
+
+    .output-box {
+      background-color: #fffbe6;
+      border: 1px solid #f4d03f;
+      padding: 20px;
+      margin-top: 25px;
+      border-radius: 10px;
+      text-align: left;
     }
 
     .icon {
@@ -130,9 +138,7 @@
 </head>
 <body>
   <div class="container">
-    <!-- New suitable logo -->
     <img src="https://cdn-icons-png.flaticon.com/512/3159/3159066.png" class="logo" alt="Review Icon" />
-
     <h1>Hotel Review Sentiment</h1>
 
     <div class="greeting">
@@ -140,19 +146,37 @@
       <p>Your feedback is incredibly valuable to us. Please share your experience below so we can continue to improve and serve you better.</p>
     </div>
 
-    <p><img src="https://cdn-icons-png.flaticon.com/512/879/879767.png" class="icon" alt="Chat Icon">Analyze the sentiment of your hotel stay instantly</p>
+    <p>
+      <img src="https://cdn-icons-png.flaticon.com/512/879/879767.png" class="icon" alt="Chat Icon">
+      Analyze the sentiment of your hotel stay instantly
+    </p>
 
     <form action="/predict" method="post">
       <textarea name="review" placeholder="Write your honest review here..." required></textarea>
       <button type="submit">Analyze</button>
     </form>
 
-    {% if prediction %}
-      <div class="result">
-        <img src="https://cdn-icons-png.flaticon.com/512/2583/2583293.png" class="icon" alt="Sentiment">
-        Sentiment: {{ prediction }}
-      </div>
+    {% if prediction or review_highlight or error %}
+    <div class="output-box">
+      {% if prediction %}
+        <div class="result">Sentiment: {{ prediction }}</div>
+      {% endif %}
+    
+      {% if error %}
+        <h3 style="color:red">{{ error }}</h3>
+      {% endif %}
+    
+      {% if review_highlight %}
+        <p>{{ review_highlight | safe }}</p>
+      {% endif %}
+    
+      {% if country and not error %}
+        <h3 style="color:green">✅ Country Detected in Review: {{ country }}</h3>
+      {% endif %}
+    </div>
     {% endif %}
+    
+
   </div>
 </body>
 </html>
